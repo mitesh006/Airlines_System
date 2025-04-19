@@ -1,60 +1,60 @@
-AI9985 Surat Mumbai 19:50 12:15
-IN7714 Surat Mumbai 15:20 20:15	
-AI9905 Mumbai Surat 7:00 12:30
-IN7705 Mumbai Surat 14:10 18:35
-IN4401 Surat Delhi  17:40 19:30
-IX4044 Surat Delhi  13:00 15:05
-IX2811 Surat Hyderabad 23:10 00:55
-IN2090 Surat Hyderabad 20:55 22:40
-IX2440 Hyderabad Surat 11:15 13:05
-IN9208 Hyderabad Surat 6:15 7:55
-IX2740 Delhi Surat 20:25 22:25
-IN2988 Delhi Surat 6:10 8:00
-IX2565 Jammu Surat 16:05 22:25
-IN2356 Jammu Surat 13:15 21:00
-IN2078 Surat Jammu 8:30 13:25
-IX2054 Surat Jammu 17:30 13:05
-IN4554 Kolkata Surat 14:15 16:55
-IX4557 Kolkata Surat 00:15 17:00
-IN5855 Surat Kolkata 17:25 20:00
-IX5765 Surat Kolkata 22:55 7:00	
-IX1176 Mumbai Delhi  04:30 06:55
-IN5205 Mumbai Delhi 1:15 3:15
-IX5560 Delhi Mumbai 7:50 9:55
-IN4755 Delhi Mumbai 3:55 6:15
-IN5841 Mumbai Kolkata 17:50 20:35
-AI5455 Mumbai Kolkata 13:50 16:50
-IN4552 Kolkata Mumbai 19:05 22:05
-AI5542 Kolkata Mumbai 22:10 1:10
-IN1224 Mumbai Jammu 14:00 18:10
-AI1630 Mumbai Jammu 9:40 15:35
-IN2545 Jammu Mumbai 18:40 23:00
-AI2346 Jammu Mumbai 16:05 21:15
-IN3455 Mumbai Hyderabad 19:45 21:25
-AI5423 Mumbai Hyderabad 16:00 17:35
-IN5875 Hyderabad Mumbai 14:25 16:00
-AI6554 Hyderabad Mumbai 12:15 14:05
-IN5845 Delhi Kolkata 19:30 21:45
-AI4554 Delhi Kolkata 21:55 00:15
-IN4356 Kolkata Delhi 21:15 23:40
-AI2314 Kolkata Delhi 10:25 13:00
-IN4232 Delhi Jammu 18:25 19:45
-IX4520 Delhi Jammu 10:40 12:05
-IN4560 Jammu Delhi 18:10 19:40
-AI4450 Jammu Delhi 16:05 17:35
-IN5664 Delhi Hyderabad 14:00 16:15
-AI1322 Delhi Hyderabad 14:45 17:10
-IN2322 Hyderabad Delhi 21:30 00:05
-AI3545 Hyderabad Delhi 18:10 20:45
-IN4557 Kolkata Jammu 14:45 19:45
-AI4523 Kolkata Jammu 7:00 12:05
-IN3227 Jammu Kolkata 19:50 23:55
-IX2334 Jammu Kolkata 13:35 23:45
-IX5006 Kolkata Hyderabad 20:40 23:05
-IN3264 Kolkata Hyderabad 5:20 7:30
-IX4535 Hyderabad Kolkata 16:45 19:05
-IN1233 Hyderabad Kolkata 12:00 14:10
-IN2348 Hyderabad Jammu 7:05 10:00
-AI2435 Hyderabad Jammu 7:00 12:05
-IN3246 Jammu Hyderabad 10:40 13:25
-AI2365 Jammu Hyderabad 16:05 21:50
+AI9985 Surat STV Mumbai BOM 19:50 12:15
+IN7714 Surat STV Mumbai BOM 15:20 20:15	
+AI9905 Mumbai BOM Surat STV 7:00 12:30
+IN7705 Mumbai BOM Surat STV 14:10 18:35
+IN4401 Surat STV Delhi DEL  17:40 19:30
+IX4044 Surat STV Delhi DEL  13:00 15:05
+IX2811 Surat STV Hyderabad HYD 23:10 00:55
+IN2090 Surat STV Hyderabad HYD 20:55 22:40
+IX2440 Hyderabad HYD Surat STV 11:15 13:05
+IN9208 Hyderabad HYD Surat STV 6:15 7:55
+IX2740 Delhi DEL Surat STV 20:25 22:25
+IN2988 Delhi DEL Surat STV 6:10 8:00
+IX2565 Jammu IXJ Surat STV 16:05 22:25
+IN2356 Jammu IXJ Surat STV 13:15 21:00
+IN2078 Surat STV Jammu IXJ 8:30 13:25
+IX2054 Surat STV Jammu IXJ 17:30 13:05
+IN4554 Kolkata CCU Surat STV 14:15 16:55
+IX4557 Kolkata CCU Surat STV 00:15 17:00
+IN5855 Surat STV Kolkata CCU 17:25 20:00
+IX5765 Surat STV Kolkata CCU 22:55 7:00	
+IX1176 Mumbai BOM Delhi DEL  04:30 06:55
+IN5205 Mumbai BOM Delhi DEL 1:15 3:15
+IX5560 Delhi DEL Mumbai BOM 7:50 9:55
+IN4755 Delhi DEL Mumbai BOM 3:55 6:15
+IN5841 Mumbai BOM Kolkata CCU 17:50 20:35
+AI5455 Mumbai BOM Kolkata CCU 13:50 16:50
+IN4552 Kolkata CCU Mumbai BOM 19:05 22:05
+AI5542 Kolkata CCU CCU Mumbai BOM 22:10 1:10
+IN1224 Mumbai BOM Jammu IXJ 14:00 18:10
+AI1630 Mumbai BOM Jammu IXJ 9:40 15:35
+IN2545 Jammu IXJ Mumbai BOM 18:40 23:00
+AI2346 Jammu IXJ Mumbai BOM 16:05 21:15
+IN3455 Mumbai BOM Hyderabad HYD 19:45 21:25
+AI5423 Mumbai BOM Hyderabad HYD 16:00 17:35
+IN5875 Hyderabad HYD Mumbai BOM 14:25 16:00
+AI6554 Hyderabad HYD Mumbai BOM 12:15 14:05
+IN5845 Delhi DEL Kolkata CCU 19:30 21:45
+AI4554 Delhi DEL Kolkata CCU 21:55 00:15
+IN4356 Kolkata CCU Delhi DEL 21:15 23:40
+AI2314 Kolkata CCU Delhi DEL 10:25 13:00
+IN4232 Delhi DEL Jammu IXJ 18:25 19:45
+IX4520 Delhi DEL Jammu IXJ 10:40 12:05
+IN4560 Jammu IXJ Delhi DEL 18:10 19:40
+AI4450 Jammu IXJ Delhi DEL 16:05 17:35
+IN5664 Delhi DEL Hyderabad HYD 14:00 16:15
+AI1322 Delhi DEL Hyderabad HYD 14:45 17:10
+IN2322 Hyderabad HYD Delhi DEL 21:30 00:05
+AI3545 Hyderabad HYD Delhi DEL 18:10 20:45
+IN4557 Kolkata CCU Jammu IXJ 14:45 19:45
+AI4523 Kolkata CCU Jammu IXJ 7:00 12:05
+IN3227 Jammu IXJ Kolkata CCU 19:50 23:55
+IX2334 Jammu IXJ Kolkata CCU 13:35 23:45
+IX5006 Kolkata CCU Hyderabad HYD 20:40 23:05
+IN3264 Kolkata CCU Hyderabad HYD 5:20 7:30
+IX4535 Hyderabad HYD Kolkata CCU 16:45 19:05
+IN1233 Hyderabad HYD Kolkata CCU 12:00 14:10
+IN2348 Hyderabad HYD Jammu IXJ 7:05 10:00
+AI2435 Hyderabad HYD Jammu IXJ 7:00 12:05
+IN3246 Jammu IXJ Hyderabad HYD 10:40 13:25
+AI2365 Jammu IXJ Hyderabad HYD 16:05 21:50
