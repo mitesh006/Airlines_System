@@ -1,95 +1,168 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include <string> 
+#include <string>
 
 using namespace std;
 
 class Flights {
-    
-    public :
+public:
     string FlightID;
     string Origin;
     string OriginSF;
     string Destination;
     string DestinationSF;
     string DepartureTime;
-    string ArrivalTime; 
-
+    string ArrivalTime;
 
     void display() const {
-        cout<<"\n Available Flights::"<<endl;
-
-        cout << "Flight ID: " << FlightID << ", Origin: " << Origin << " (" << OriginSF << ")" 
-        << ", Destination: " << Destination << " " << DestinationSF << ", Departure Time: " << DepartureTime
-        << ", Arrival Time: " << ArrivalTime << endl;
+        cout << "\nAvailable Flights:\n";
+        cout << "Flight ID: " << FlightID << ", Origin: " << Origin << " (" << OriginSF << ")"
+             << ", Destination: " << Destination << " (" << DestinationSF << ")"
+             << ", Departure Time: " << DepartureTime << ", Arrival Time: " << ArrivalTime << endl;
     }
+};
 
+class Passenger {
+public:
+    string name;
+    int age;
+
+    Passenger(string n, int a) {
+        name = n;
+        age = a;
+    }
 };
 
 int main() {
     vector<Flights> flights;
     int n;
-    
-    cout<<"Enter 1 For View Flights"<<endl;
-    cout<<"Enter 2 For View Tickets"<<endl;
-    cout<<"Enter 0 For Exit.."<<endl;
 
-while(true){
-    switch(n){
- case 1:
- char ch;int ps;
- ifstream file("flights.txt");
+    while (true) {
+        cout<<"..WelCome to Flight Booking System..."<<endl;
+        cout << "\nEnter 1 For View Flights\n";
+        cout << "Enter 2 For View Tickets\n";
+        cout << "Enter 0 For Exit..\n";
+        cin >> n;
 
-    cout << "Flight Booking" << endl;
-    if (!file.is_open()) {
-        cout << "Error: Could not open file." << endl;
-        return 1;
-    }
+        if (n == 0) {
+            break;
+        }
 
-    string searchOrigin, searchDestination;
-    cout << "Enter origin to search: ";
-    cin >> searchOrigin;
-    cout << "Enter destination to search: ";
-    cin >> searchDestination;
+        switch (n) {
+            case 1: {
+                ifstream file("flights.txt");
+                if (!file.is_open()) {
+                    cout << "Error: Could not open file." << endl;
+                    continue;
+                }
 
+                string searchOrigin, searchDestination;
+                cout << "Enter origin to search: ";
+                cin >> searchOrigin;
+                cout << "Enter destination to search: ";
+                cin >> searchDestination;
 
-    Flights temp;
-    while (file >> temp.FlightID >> temp.Origin >> temp.OriginSF >> temp.Destination >> temp.DestinationSF >> temp.DepartureTime >> temp.ArrivalTime) {
-        if ((temp.Origin == searchOrigin || temp.OriginSF == searchOrigin) && temp.Destination == searchDestination) {
-            flights.push_back(temp);
+                Flights temp;
+                flights.clear(); // Clear previous results
+                while (file >> temp.FlightID >> temp.Origin >> temp.OriginSF >> temp.Destination >> temp.DestinationSF >> temp.DepartureTime >> temp.ArrivalTime) {
+                    if ((temp.Origin == searchOrigin || temp.OriginSF == searchOrigin) &&
+                        (temp.Destination == searchDestination || temp.DestinationSF == searchDestination)) {
+                        flights.push_back(temp);
+                    }
+                }
+
+                file.close();
+
+                if (flights.empty()) {
+                    cout << "Flight not found.\n";
+                    break;
+                }
+
+                cout << "Matching result(s):\n";
+                for (size_t i = 0; i < flights.size(); ++i) {
+                    cout << "[" << i + 1 << "] ";
+                    flights[i].display();
+                }
+
+                char ch;
+                cout << "Do you want to book a flight? (Y/N): ";
+                cin >> ch;
+
+                if (ch == 'Y' || ch == 'y') {
+                    int choice, ps;
+                    cout << "Select flight by number (e.g., 1, 2...): ";
+                    cin >> choice;
+                    if (choice < 1 || choice > flights.size()) {
+                        cout << "Invalid choice.\n";
+                        break;
+                    }
+
+                    Flights selectedFlight = flights[choice - 1];
+
+                    cout << "Enter number of passengers: ";
+                    cin >> ps;
+
+                    vector<Passenger> passengers;
+
+                    for (int i = 0; i < ps; ++i) {
+                        string pname;
+                        int page;
+                        cout << "Enter name of Passenger " << i + 1 << ": ";
+                        cin >> pname;
+                        cout << "Enter age of Passenger " << i + 1 << ": ";
+                        cin >> page;
+                        passengers.push_back(Passenger(pname, page));
+                    }
+
+                    // Save to file
+                    ofstream ticketFile("passenger_tickets.txt", ios::app);
+                    if (!ticketFile.is_open()) {
+                        cout << "Error opening ticket file.\n";
+                        break;
+                    }
+
+                    ticketFile << "\n------------------------------\n";
+                    ticketFile << "Flight Ticket Details:\n";
+                    ticketFile << "Flight ID: " << selectedFlight.FlightID << endl;
+                    ticketFile << "Origin: " << selectedFlight.Origin << " (" << selectedFlight.OriginSF << ")\n";
+                    ticketFile << "Destination: " << selectedFlight.Destination << " (" << selectedFlight.DestinationSF << ")\n";
+                    ticketFile << "Departure Time: " << selectedFlight.DepartureTime << ", Arrival Time: " << selectedFlight.ArrivalTime << "\n";
+                    ticketFile << "Passenger(s):\n";
+
+                    for (const auto &p : passengers) {
+                        ticketFile << "- Name: " << p.name << ", Age: " << p.age << "\n";
+                    }
+                    ticketFile << "------------------------------\n";
+
+                    ticketFile.close();
+
+                    cout << "Ticket successfully booked and saved!\n";
+                }
+
+                break;
+            }
+
+            case 2: {
+                ifstream ticketFile("passenger_tickets.txt");
+                if (!ticketFile.is_open()) {
+                    cout << "No tickets found.\n";
+                    break;
+                }
+
+                string line;
+                while (getline(ticketFile, line)) {
+                    cout << line << endl;
+                }
+
+                ticketFile.close();
+                break;
+            }
+
+            default:
+                cout << "Invalid option. Try again.\n";
         }
     }
-
-    if (flights.empty()) {
-        cout << "Flight not found." << endl;
-    } else {
-        cout << "Matching result(s):\n";
-        for (const auto &f : flights) {
-            f.display();
-        }
-    }
- file.close();
- cout<<"Do You Want Book Flight- If Yes Press 'Y' Or if Not Press 'N'";
- cin>>ch;
- cout<<"Enter Number OF Passenger::";
- cin>>ps;
- if(ch=='y'|| ch=='Y')
- {
-    int i=0;
- while(ps!=0){
-    string name;int age;
-    cout<<"Enter Details Of Passener"<<i+1;
-    cin>>
-
- }
- }
-
-
-
-
-    }
-}
 
     return 0;
 }

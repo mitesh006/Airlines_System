@@ -1,0 +1,13 @@
+
+------------------------------
+Flight Ticket Details:
+Flight ID: IN5855
+Origin: Surat (STV)
+Destination: Kolkata (CCU)
+Departure Time: 17:25, Arrival Time: 20:00
+Passenger(s):
+- Name: scam, Age: 0
+- Name: , Age: 0
+- Name: , Age: 0
+- Name: , Age: 0
+------------------------------
