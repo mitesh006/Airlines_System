@@ -10,15 +10,20 @@ class Flights {
     public :
     string FlightID;
     string Origin;
+    string OriginSF;
     string Destination;
+    string DestinationSF;
     string DepartureTime;
     string ArrivalTime;
+    string FlightPrice;
 
 
     void display() const {
-        cout << "Flight ID: " << FlightID << ", Origin: " << Origin
-             << ", Destination: " << Destination << ", Departure Time: " << DepartureTime
-             << ", Arrival Time: " << ArrivalTime << endl;
+        cout << "Flight ID: " << FlightID << ", Origin: " << Origin << " (" << OriginSF << ") "
+        << ", Destination: " << Destination << " (" << DestinationSF << ") " 
+        << ", Departure Time: " << DepartureTime
+        << ", Arrival Time: " << ArrivalTime 
+        << ", Price: " << FlightPrice << endl;
     }
 
 };
@@ -40,8 +45,8 @@ int main() {
 
 
     Flights temp;
-    while (file >> temp.FlightID >> temp.Origin >> temp.Destination >> temp.DepartureTime >> temp.ArrivalTime) {
-        if (temp.Origin == searchOrigin && temp.Destination == searchDestination) {
+    while (file >> temp.FlightID >> temp.Origin >> temp.OriginSF >> temp.Destination >> temp.DestinationSF >> temp.DepartureTime >> temp.ArrivalTime >> temp.FlightPrice) {
+        if ((temp.Origin == searchOrigin || temp.OriginSF == searchOrigin)&& (temp.Destination == searchDestination || temp.DestinationSF == searchDestination)) {
             flights.push_back(temp);
         }
     }
