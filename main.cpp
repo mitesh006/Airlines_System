@@ -7,7 +7,6 @@ using namespace std;
 
 class Flights {
     
-    public :
     string FlightID;
     string Origin;
     string OriginSF;
@@ -16,7 +15,8 @@ class Flights {
     string DepartureTime;
     string ArrivalTime;
     string FlightPrice;
-
+    
+    public :
 
     void display() const {
         cout << "Flight ID: " << FlightID << ", Origin: " << Origin << " (" << OriginSF << ") "
@@ -26,6 +26,17 @@ class Flights {
         << ", Price: " << FlightPrice << endl;
     }
 
+    string getOrigin() const { return Origin; }
+    string getOriginSF() const { return OriginSF; }
+    string getDestination() const { return Destination; }
+    string getDestinationSF() const { return DestinationSF; }
+
+    friend ifstream& operator>> (ifstream& in, Flights& f) {
+        in >> f.FlightID >> f.Origin >> f.OriginSF
+           >> f.Destination >> f.DestinationSF
+           >> f.DepartureTime >> f.ArrivalTime >> f.FlightPrice;
+        return in;
+    }
 };
 
 int main() {
@@ -45,8 +56,9 @@ int main() {
 
 
     Flights temp;
-    while (file >> temp.FlightID >> temp.Origin >> temp.OriginSF >> temp.Destination >> temp.DestinationSF >> temp.DepartureTime >> temp.ArrivalTime >> temp.FlightPrice) {
-        if ((temp.Origin == searchOrigin || temp.OriginSF == searchOrigin)&& (temp.Destination == searchDestination || temp.DestinationSF == searchDestination)) {
+    while (file >> temp) {
+        if ((temp.getOrigin() == searchOrigin || temp.getOriginSF() == searchOrigin) && 
+            (temp.getDestination() == searchDestination || temp.getDestinationSF() == searchDestination)) {
             flights.push_back(temp);
         }
     }
