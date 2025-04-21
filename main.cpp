@@ -1,33 +1,28 @@
 #include <iostream>
+#include <windows.h>
 #include <fstream>
 #include <vector>
 #include <string>
 #include <sstream>
 #include <ctime>
-
+#include <iomanip>
 using namespace std;
 
 class Flights {
 protected:
-    string FlightID;
-    string Origin;
-    string OriginSF;
-    string Destination;
-    string DestinationSF;
-    string DepartureTime;
-    string ArrivalTime;
-    string FlightPrice;
+    string FlightID, Origin, OriginSF, Destination, DestinationSF;
+    string DepartureTime, ArrivalTime, FlightPrice;
 
 public:
-    Flights() : FlightID(""), Origin(""), OriginSF(""), Destination(""), 
-    DestinationSF(""), DepartureTime(""), ArrivalTime(""), FlightPrice("") {}
+    Flights() = default;
 
     void display() const {
-        cout << "Flight ID: " << FlightID << ", Origin: " << Origin << " (" << OriginSF << ") "
-             << ", Destination: " << Destination << " (" << DestinationSF << ") "
-             << ", Departure Time: " << DepartureTime
-             << ", Arrival Time: " << ArrivalTime
-             << ", Price: " << FlightPrice << endl;
+        cout << left << setw(12) << FlightID
+             << setw(15) << (Origin + " (" + OriginSF + ")")
+             << setw(20) << (Destination + " (" + DestinationSF + ")")
+             << setw(15) << DepartureTime
+             << setw(15) << ArrivalTime
+             << "₹" << FlightPrice << endl;
     }
 
     string getFlightID() const { return FlightID; }
@@ -48,9 +43,7 @@ public:
 };
 
 class Booking : public Flights {
-
-    string PassengerName;
-    string Gender;
+    string PassengerName, Gender;
     int Age;
 
 public:
@@ -64,171 +57,180 @@ public:
         DepartureTime = flight.getDepartureTime();
         ArrivalTime = flight.getArrivalTime();
         FlightPrice = flight.getFlightPrice();
-
     }
 
     string getPassengerName() const { return PassengerName; }
     string getGender() const { return Gender; }
     int getAge() const { return Age; }
-
 };
 
-
-    void GenerateTicket(const vector<Booking>& bks) {
-
-        vector <Booking> bookings;
-        bookings = bks;
-
-        if (bookings.empty()) {
-            cout << "No bookings available to generate a ticket." << endl;
-            return;
-        }
-
-        ofstream ticket("ticket.txt");
-        if (!ticket) {
-            cout << "Error creating ticket file." << endl;
-            return;
-        }
-
-        static int ticketCounter = 1000;
-        stringstream ss;
-        ss << "TKT" << time(0) << ticketCounter++;
-        string ticketID = ss.str();
-
-        ticket << "---------- India Airlines Ticket ----------\n";
-        ticket << "Ticket ID     : " << ticketID << "\n";
-        ticket << "Flight Details:\n";
-        ticket << "-------------------------------------------\n";
-        ticket << "Flight ID     : " << bookings[0].getFlightID() << " (" << bookings[0].getOriginSF()
-               << " to " << bookings[0].getDestinationSF() << ")\n";
-        ticket << "From          : " << bookings[0].getOrigin() << endl;
-        ticket << "To            : " << bookings[0].getDestination() << endl;
-        ticket << "Departure     : " << bookings[0].getDepartureTime() << endl;
-        ticket << "Arrival       : " << bookings[0].getArrivalTime() << endl;
-        ticket << "Price         : " << bookings[0].getFlightPrice() << endl;
-        ticket << "\nPassenger(s):\n";
-
-        for (int i = 0; i < bookings.size(); ++i) {
-            ticket << i + 1 << ". Name: " << bookings[i].getPassengerName()
-                   << ", Gender: " << bookings[i].getGender()
-                   << ", Age: " << bookings[i].getAge() << "\n";
-        }
-
-        ticket.close();
+void GenerateTicket(const vector<Booking>& bookings) {
+    if (bookings.empty()) {
+        cout << "No bookings available to generate a ticket.\n";
+        return;
     }
 
+    ofstream ticket("ticket.txt");
+    if (!ticket) {
+        cout << "Error creating ticket file.\n";
+        return;
+    }
+
+    static int ticketCounter = 1000;
+    stringstream ss;
+    ss << "TKT" << time(0) << ticketCounter++;
+    string ticketID = ss.str();
+
+    ticket << "--------------- India Airlines Ticket ---------------\n";
+    ticket << "Ticket ID     : " << ticketID << "\n\n";
+    ticket << "Flight Details:\n";
+    ticket << "-----------------------------------------------------\n";
+    ticket << "Flight ID     : " << bookings[0].getFlightID() << "\n";
+    ticket << "From          : " << bookings[0].getOrigin() << " (" << bookings[0].getOriginSF() << ")\n";
+    ticket << "To            : " << bookings[0].getDestination() << " (" << bookings[0].getDestinationSF() << ")\n";
+    ticket << "Departure     : " << bookings[0].getDepartureTime() << "\n";
+    ticket << "Arrival       : " << bookings[0].getArrivalTime() << "\n";
+    ticket << "Price (each)  : ₹" << bookings[0].getFlightPrice() << "\n\n";
+
+    ticket << "Passenger(s):\n";
+    for (int i = 0; i < bookings.size(); ++i) {
+        ticket << i + 1 << ". " << bookings[i].getPassengerName()
+               << " | Gender: " << bookings[i].getGender()
+               << " | Age: " << bookings[i].getAge() << "\n";
+    }
+
+    ticket.close();
+    cout << "Ticket successfully generated: ticket.txt\n";
+}
+
+void DisplayMenu() {
+    cout << "\nMenu:\n";
+    cout << "1. Search & Book Flights\n";
+    cout << "2. View Ticket\n";
+    cout << "3. Exit\n";
+    cout << "Enter choice: ";
+}
+
+void SearchAndBookFlights(vector<Flights>& flights, vector<Booking>& bookings, Flights& selectedFlight) {
+    ifstream file("flights.txt");
+    if (!file) {
+        cout << "Error: Could not open flights.txt\n";
+        return;
+    }
+
+    string searchOrigin, searchDestination;
+    cout << "\nEnter origin city or code      : ";
+    cin >> searchOrigin;
+    cout << "Enter destination city or code : ";
+    cin >> searchDestination;
+
+    Flights temp;
+    flights.clear();
+    while (file >> temp) {
+        if ((temp.getOrigin() == searchOrigin || temp.getOriginSF() == searchOrigin) &&
+            (temp.getDestination() == searchDestination || temp.getDestinationSF() == searchDestination)) {
+            flights.push_back(temp);
+        }
+    }
+
+    if (flights.empty()) {
+        cout << "\nNo matching flights found.\n";
+        return;
+    }
+
+    cout << "\nAvailable Flights:\n";
+    cout << left << setw(12) << "FlightID"
+         << setw(15) << "Origin"
+         << setw(20) << "Destination"
+         << setw(15) << "Departure"
+         << setw(15) << "Arrival"
+         << "Price\n";
+    int i = 0;
+    for (const auto& f : flights) {
+        cout << ++i << ". ";
+        f.display();
+    }
+
+    file.close();
+
+    int ch2;
+    cout << "\nEnter flight number to book: ";
+    cin >> ch2;
+    if (ch2 < 1 || ch2 > flights.size()) {
+        cout << "Invalid selection.\n";
+        return;
+    }
+    selectedFlight = flights[ch2 - 1];
+
+    int num;
+    cout << "Number of passengers: ";
+    cin >> num;
+
+    cin.ignore();
+    bookings.clear();
+    for (int i = 0; i < num; ++i) {
+        string name, gender;
+        int age;
+        cout << "\nPassenger " << i + 1 << " Name   : ";
+        getline(cin, name);
+        cout << "Gender (M/F/O)       : ";
+        cin >> gender;
+        cout << "Age                  : ";
+        cin >> age;
+        cin.ignore();
+
+        bookings.emplace_back(name, gender, age, selectedFlight);
+    }
+}
+
+void ViewTicket(const vector<Booking>& bookings) {
+    GenerateTicket(bookings);
+    try {
+        ifstream ticket("ticket.txt");
+        if (!ticket.is_open()) {
+            throw runtime_error("ticket.txt not found. Please book first.");
+        }
+        cout << "\n--------- Your Ticket ---------\n";
+        string line;
+        while (getline(ticket, line)) {
+            cout << line << endl;
+        }
+        ticket.close();
+    } catch (const exception& e) {
+        cout << "Error: " << e.what() << endl;
+    }
+}
+
 int main() {
+    SetConsoleOutputCP(CP_UTF8);
+
     vector<Flights> flights;
     Flights selectedFlight;
     vector<Booking> bookings;
 
-    cout << "India AirLines" << endl;
+    cout << "\n========= Welcome to India Airlines =========\n";
 
-    int ch1;
+    while (true) {
+        DisplayMenu();
 
-    while (1) {
-        cout << "1. Search Flights" << endl;
-        cout << "2. View Tickets" << endl;
-        cout << "3. Exit" << endl;
-
+        int ch1;
         cin >> ch1;
 
         switch (ch1) {
-            case 1: {
-                ifstream file("flights.txt");
-                if (!file.is_open()) {
-                    cout << "Error: Could not open file." << endl;
-                    return 1;
-                }
-
-                string searchOrigin, searchDestination;
-                cout << "Enter origin      : ";
-                cin >> searchOrigin;
-                cout << "Enter destination : ";
-                cin >> searchDestination;
-
-                Flights temp;
-                while (file >> temp) {
-                    if ((temp.getOrigin() == searchOrigin || temp.getOriginSF() == searchOrigin) &&
-                        (temp.getDestination() == searchDestination || temp.getDestinationSF() == searchDestination)) {
-                        flights.push_back(temp);
-                    }
-                }
-
-                if (flights.empty()) {
-                    cout << "Flight not found." << endl;
-                    break;
-                } else {
-                    cout << "Matching flight(s):\n";
-                    int i = 0;
-                    for (const auto& f : flights) {
-                        cout << ++i << ". ";
-                        f.display();
-                    }
-                }
-
-                file.close();
-
-                try {
-                    cout << "Enter the flight number to book (1-" << flights.size() << "): ";
-                    int ch2;
-                    cin >> ch2;
-                    if (ch2 < 1 || ch2 > flights.size()) {
-                        throw runtime_error("Invalid flight number selected.");
-                    }
-                    selectedFlight = flights[ch2 - 1];
-                } catch (const exception& e) {
-                    cout << "Error: " << e.what() << endl;
-                    break;
-                }
-
-                int n;
-                cout << "Enter number of passengers: ";
-                cin >> n;
-
-                string name, gen;
-                int ag;
-
-                for (int i = 0; i < n; i++) {
-                    cout << i + 1 << "." << endl;
-                    cout << "Passenger's Name   : ";
-                    cin.ignore();
-                    getline(cin, name);
-                    cout << "Passenger's Gender : ";
-                    cin >> gen;
-                    cout << "Passenger's Age    : ";
-                    cin >> ag;
-
-                    Booking b(name, gen, ag, selectedFlight);
-                    bookings.push_back(b);
-                }
-
+            case 1:
+                SearchAndBookFlights(flights, bookings, selectedFlight);
                 break;
-            }
 
-            case 2: {
-
-                GenerateTicket(bookings);
-
-                try {
-                    ifstream ticket("ticket.txt");
-                    if (!ticket.is_open()) {
-                        throw runtime_error("Ticket file not found. Book a flight first.");
-                    }
-                    string line;
-                    while (getline(ticket, line)) {
-                        cout << line << endl;
-                    }
-                    ticket.close();
-                } catch (const exception& e) {
-                    cout << "Error: " << e.what() << endl;
-                }
+            case 2:
+                ViewTicket(bookings);
                 break;
-            }
 
             case 3:
+                cout << "\nThank you for choosing India Airlines!\n";
                 return 0;
+
+            default:
+                cout << "Invalid option. Try again.\n";
         }
     }
 }
-
