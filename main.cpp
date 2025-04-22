@@ -208,13 +208,13 @@ void SearchFlights(vector<Flights>& flights, vector<Booking>& bookings, Flights&
         cout << "Error: Could not open flights.txt. Please ensure the file exists.\n";
         return;
     }
-    cout << "\nSearching for flights...\n";                 // prompt user to enter flight details
-    string searchOrigin, searchDestination;
+    string searchOrigin, searchDestination;         // prompt user to enter flight details
     cout << "\nEnter origin city or code (e.g., DEL): ";
     cin >> searchOrigin;
     cout << "Enter destination city or code (e.g., BOM): ";
     cin >> searchDestination;
     
+    cout << "\nSearching for flights...\n";                 
     Flights temp;
     flights.clear();
     while (file >> temp) {              // read flight details from file    
@@ -327,7 +327,7 @@ void ViewTickets() {            // display all tickets
             if (ticket.is_open()) {
                 string line;
                 while (getline(ticket, line)) {
-                    cout << line << endl;eeee
+                    cout << line << endl;
                 }
                 ticket.close();
             } else {
