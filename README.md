@@ -1,99 +1,124 @@
-# Airlines System
 
-This project is an Airlines Management System developed in C++. It incorporates essential programming concepts such as file handling, inheritance, and Standard Template Library (STL) features like vectors to provide a robust and flexible application.
+# ✈️ C++ Airline Booking System
 
----
-
-## Table of Contents
-- [Installation](#installation)
-- [Prerequisites](#prerequisites)
-- [Features and Concepts Used](#features-and-concepts-used)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
+A command-line airline ticket booking system developed in C++, supporting flight search, booking, ticket generation, viewing, and cancellation using file handling and object-oriented design.
 
 ---
 
-## Installation
+## 📦 Features
 
-Follow these steps to set up and run the Airlines System project:
+- 🔍 Search flights by origin and destination
+- 🎟️ Book multiple passengers in one go
+- 📁 Generates a ticket file for each booking group in the `tickets/` folder
+- ❌ Cancel a booking using the unique Ticket ID
+- 💾 Persistent data via `flights.txt`, `bookings.txt`, and `ticket_counter.txt`
 
-1. Clone the repository:
+---
+
+## ✅ Prerequisites
+
+Ensure you have the following installed on your system:
+
+- **GCC/G++ compiler (version 9 or later)**  
+  Confirm with:
+  ```bash
+  g++ --version
+  ```
+
+- **DLL dependencies (for Windows builds):**
+  These should be in the same folder as the `airlines.exe`:
+  - `libgcc_s_seh-1.dll`
+  - `libstdc++-6.dll`
+  - `libwinpthread-1.dll`
+
+---
+
+## 🚀 Installation & Running
+
+1. **Compile the program (if not using the provided executable):**
    ```bash
-   git clone https://github.com/mitesh006/Airlines_System.git
-   cd Airlines_System
+   g++ -std=c++17 -o airlines.exe main.cpp
    ```
 
-2. Compile the project using `g++`:
+2. **Run the executable:**
    ```bash
-   g++ -std=c++17 -o airlines_system main.cpp
+   ./airlines.exe
    ```
 
-3. Run the executable:
-   ```bash
-   ./airlines_system
-   ```
+3. **Ensure the following files are present in the root directory:**
+   - `flights.txt` – list of available flights
+   - `ticket_counter.txt` – used to generate unique ticket IDs
+   - `bookings.txt` – stores all past bookings
+   - `tickets/` – stores generated ticket files
 
 ---
 
-## Prerequisites
+## 🔧 Project Structure
 
-Ensure your system meets the following requirements:
-
-- **GCC Compiler**: Version 9 or higher
-  - Verify GCC installation:
-    ```bash
-    gcc --version
-    ```
-
-- **DLL Files** (For Windows users):
-  - Ensure that essential dynamic link libraries (DLLs) required by GCC are available on your system. These are typically included with MinGW or Cygwin installations.
-
-- **C++17**: The project requires a compiler that supports C++17 features.
-
----
-
-## Features and Concepts Used
-
-This project leverages several key programming concepts:
-
-1. **File Handling**:
-   - Read and write operations to store and retrieve data persistently.
-
-2. **Inheritance**:
-   - Object-oriented programming (OOP) concepts to model real-world entities and establish relationships between classes.
-
-3. **Standard Template Library (STL)**:
-   - Efficient use of `std::vector` to manage dynamic arrays and streamline data manipulation.
+```
+.
+├── airlines.exe              # Compiled executable
+├── bookings.txt              # Stores all bookings persistently
+├── flights.txt               # Master list of available flights
+├── ticket_counter.txt        # Maintains global ticket counter across runs
+├── tickets/                  # Contains ticket files for each group booking
+│   └── ticket_TKT<timestamp><count>.txt
+├── main.cpp                  # Source code file
+├── README.md                 # This documentation
+└── *.dll                     # Required runtime DLLs for Windows
+```
 
 ---
 
-## Usage
+## 🧠 Concepts Used
 
-After running the application, you will have access to the following functionalities:
+### 📁 File Handling
 
-- Manage airline bookings.
-- View and update flight schedules.
-- Handle customer and ticketing data efficiently.
+- **Reading flights** from `flights.txt` using file streams
+- **Saving and loading bookings** to/from `bookings.txt`
+- **Ticket generation** to `tickets/ticket_<ticketID>.txt`
+- **Tracking ticket number** with `ticket_counter.txt` for unique filenames
+
+### 👪 Inheritance
+
+- `Flights` class encapsulates flight info.
+- `Booking` class inherits flight info and adds passenger details.
+- This demonstrates how inheritance allows modular extension of base classes.
+
+### 📚 STL (Standard Template Library)
+
+- **Vectors:** 
+  - Used to store lists of flights and bookings dynamically.
+  - Simplifies memory management and iteration.
+
+- **File Streams (`ifstream`, `ofstream`)** used for persistent storage.
+
+- **String manipulation, `stringstream`, `getline`** used for formatted I/O and ticket ID generation.
 
 ---
 
-## Contributing
+## 💡 Notes
 
-We welcome contributions to improve this project! Follow these steps to contribute:
-
-1. Fork the repository.
-2. Create a new branch (`git checkout -b feature-name`).
-3. Commit your changes (`git commit -m "Add some feature"`).
-4. Push to the branch (`git push origin feature-name`).
-5. Open a pull request.
+- Ticket ID generation uses a mix of `time(0)` and a counter from `ticket_counter.txt`.
+- Bookings for multiple passengers in one session share the same ticket ID and are grouped under one ticket file.
+- Tickets can be canceled by entering the exact Ticket ID.
 
 ---
 
-## License
+## 📷 Screenshot
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
+![Airline Booking System Screenshot](976ea1c6-6621-4dfe-9737-3e3885182753.png)
 
 ---
 
-Happy Coding!
+## 🛠️ Future Improvements
+
+- GUI version using Qt or SFML
+- Integration with a real database (e.g., SQLite)
+- User login and account management
+
+---
+
+## 👨‍💻 Author
+
+Built as a C++ project to demonstrate file handling, class inheritance, and STL usage in a practical system.
