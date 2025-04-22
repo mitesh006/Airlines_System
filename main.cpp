@@ -248,7 +248,7 @@ void SearchFlights(vector<Flights>& flights, vector<Booking>& bookings, Flights&
     
 } 
 
-void SaveBookingsToFile(const vector<vector<Booking>>& allBookings) {  // save booking details to file
+void SaveBookingsToFile(const vector<vector<Booking>>& allBookings) {   // save booking details to file
     ofstream file("bookings.txt");
     if (!file) {
         cout << "Error opening file to save bookings.\n";
