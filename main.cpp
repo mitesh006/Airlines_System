@@ -3,10 +3,14 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include <filesystem>
 #include <sstream>
 #include <ctime>
 #include <iomanip>
+#include <filesystem>
+
 using namespace std;
+namespace fs = std::filesystem;
 
 class Flights {
 protected:
@@ -74,19 +78,41 @@ void DisplayMenu() {
     cout << "Enter your choice (1-4): ";
 }
 
+int Counter() {
+
+    const string counterFile = "ticket_counter.txt";
+    int counter = 1000;
+
+    ifstream in (counterFile);
+    if (in) {
+        in >> counter;
+        in.close();
+    }
+
+    ofstream out(counterFile);
+    if (out) {
+        out << counter + 1;
+        out.close();
+    }
+
+    return counter;
+}
+
 void GenerateTicket(const vector<Booking>& bookings) {
     if (bookings.empty()) {
         cout << "No bookings available to generate a ticket.\n";
         return;
     }
+
+    fs::create_directory("tickets");
     
-    static int ticketCounter = 1000;
+    int ticketCounter = Counter();
     stringstream ss;
-    ss << "TKT" << time(0) << ticketCounter++;
+    ss << "TKT" << time(0) << ticketCounter;
     string ticketID = ss.str();
     
     string fileName = "ticket_" + ticketID + ".txt";
-    ofstream ticket(fileName);
+    ofstream ticket("tickets/" + fileName);
     if (!ticket) {
         cout << "Error creating ticket file.\n";
         return;
@@ -190,85 +216,90 @@ void SearchAndBookFlights(vector<Flights>& flights, vector<Booking>& bookings, F
     
 }
 
-
 void SaveBookingsToFile(const vector<vector<Booking>>& allBookings) {
     ofstream file("bookings.txt");
     if (!file) {
-        cout << "Error saving bookings to file.\n";
+        cout << "Error opening file to save bookings.\n";
         return;
     }
-    
-    for (const auto& bookingGroup : allBookings) {
-        for (const auto& booking : bookingGroup) {
-            file << booking.getPassengerName() << " "
-            << booking.getGender() << " "
-            << booking.getAge() << " "
-            << booking.getFlightID() << " "
-            << booking.getOrigin() << " "
-            << booking.getDestination() << " "
-            << booking.getDepartureTime() << " "
-            << booking.getArrivalTime() << " "
-            << booking.getFlightPrice() << "\n";
+
+    for (const auto& group : allBookings) {
+        for (const auto& b : group) {
+            file << b.getPassengerName() << " "
+                 << b.getGender() << " "
+                 << b.getAge() << " "
+                 << b.getFlightID() << " "
+                 << b.getOrigin() << " "
+                 << b.getOriginSF() << " "
+                 << b.getDestination() << " "
+                 << b.getDestinationSF() << " "
+                 << b.getDepartureTime() << " "
+                 << b.getArrivalTime() << " "
+                 << b.getFlightPrice() << "\n";
         }
-        file << "---\n"; // Separator for different bookings
+        file << "--- END ---\n";
     }
+
     file.close();
 }
 
-void LoadBookingsFromFile(vector<vector<Booking>>& allBookings, const vector<Flights>& flights) {
-ifstream file("bookings.txt");
-if (!file) {
-    cout << "No previous bookings found.\n";
-    return;
-}
+void LoadBookingsFromFile(vector<vector<Booking>>& allBookings) {
+    ifstream file("bookings.txt");
+    if (!file) {
+        cout << "No previous bookings found.\n";
+        return;
+    }
 
-vector<Booking> bookingGroup;
-string name, gender, flightID, origin, destination, departure, arrival, price;
-int age;
-while (file >> name >> gender >> age >> flightID >> origin >> destination >> departure >> arrival >> price) {
+    vector<Booking> bookingGroup;
+    string name, gender, flightID, origin, originSF, destination, destinationSF, departure, arrival, price;
+    int age;
+
     Flights flight;
-    flight.getFlightID() = flightID;
-    flight.getOrigin() = origin;
-        flight.getDestination() = destination;
-        flight.getDepartureTime() = departure;
-        flight.getArrivalTime() = arrival;
-        flight.getFlightPrice() = price;
+    flight = Flights(); // Reset object
+
+    while (file >> name >> gender >> age && file >> flight) {
         
+
         bookingGroup.emplace_back(name, gender, age, flight);
-        
-        if (file.peek() == '-') { // End of a booking group
+
+        string separator;
+        getline(file, separator); // Read to end of line
+        if (separator.find("--- END ---") != string::npos) {
             allBookings.push_back(bookingGroup);
             bookingGroup.clear();
-            file.ignore(256, '\n'); // Skip the separator line
         }
     }
+
     file.close();
 }
 
-void ViewAllTickets(const vector<vector<Booking>>& allBookings) {
-    if (allBookings.empty()) {
-        cout << "No tickets available.\n";
+void ViewTickets() {
+    
+    string ticketsDir = "tickets/";
+    if (!fs::exists(ticketsDir) || fs::is_empty(ticketsDir)) {
+        cout << "No ticekts available." << endl;
         return;
     }
 
-    for (int i = 0; i < allBookings.size(); ++i) {
-        cout << "\nTicket " << i + 1 << ":\n";
-        ifstream ticket("ticket.txt");
-        if (ticket.is_open()) {
-            string line;
-            while (getline(ticket, line)) {
-                cout << line << endl;
+    cout << "\nDisplaying all tickets:\n";
+    for (const auto& entry : fs::directory_iterator(ticketsDir)) {
+        if (entry.is_regular_file()) {
+            cout << "\nTicket File: " << entry.path().filename() << "\n";
+            ifstream ticket(entry.path());
+            if (ticket.is_open()) {
+                string line;
+                while (getline(ticket, line)) {
+                    cout << line << endl;
+                }
+                ticket.close();
+            } else {
+                cout << "Error opening ticket file: " << entry.path().filename() << "\n";
             }
-            ticket.close();
         }
     }
 }
 
 void CancelBooking(vector<vector<Booking>>& allBookings) {
-    if (allBookings.empty()) {
-        cout << "No bookings to cancel.\n";
-        return;
-    }
 
     cout << "Available Tickets:\n";
     for (int i = 0; i < allBookings.size(); ++i) {
@@ -284,6 +315,17 @@ void CancelBooking(vector<vector<Booking>>& allBookings) {
         return;
     }
 
+    stringstream ss;
+    ss << "TKT" << time(0) << (1000 + choice - 1);
+    string ticketFileName = "tickets/ticket_" + ss.str() + ".txt";
+
+    if (fs::exists(ticketFileName)) {
+        fs::remove(ticketFileName);
+        cout << "Ticket file " << ticketFileName << " deleted successfully.\n";
+    } else {
+        cout << "Ticket file " << ticketFileName << " not found.\n";
+    }
+
     allBookings.erase(allBookings.begin() + (choice - 1));
     SaveBookingsToFile(allBookings); // Update the file
     cout << "Booking canceled successfully.\n";
@@ -294,9 +336,9 @@ int main() {
 
     vector<Flights> flights;
     Flights selectedFlight;
-    vector<vector<Booking>> allBookings;
+    vector<vector<Booking>> allBookings; 
 
-    LoadBookingsFromFile(allBookings, flights); // Load previous bookings
+    LoadBookingsFromFile(allBookings); 
 
     cout << "\n========= Welcome to India Airlines =========\n";
 
@@ -312,12 +354,12 @@ int main() {
                 SearchAndBookFlights(flights, bookings, selectedFlight);
                 if (!bookings.empty()) {
                     allBookings.push_back(bookings);
-                    SaveBookingsToFile(allBookings); // Save after each booking
+                    SaveBookingsToFile(allBookings);
                 }
                 break;
             }
             case 2:
-                ViewAllTickets(allBookings);
+                ViewTickets();
                 break;
             case 3:
                 CancelBooking(allBookings);
