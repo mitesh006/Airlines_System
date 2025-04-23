@@ -225,6 +225,7 @@ void SearchFlights(vector<Flights>& flights, vector<Booking>& bookings, Flights&
                 flights.push_back(temp);
             }
         }
+        file.close();
 
         if (flights.empty()) {
             throw runtime_error("No matching flights found. Please try again.");
@@ -243,7 +244,6 @@ void SearchFlights(vector<Flights>& flights, vector<Booking>& bookings, Flights&
             f.display();
         }
 
-        file.close();
         BookFlights(flights, bookings, selectedFlight);
     } catch (const exception& e) {
         cerr << "Error: " << e.what() << "\n";
