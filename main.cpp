@@ -8,6 +8,8 @@
 #include <iomanip>  // for formatting output
 #include <filesystem>   // for creating directories
 #include <stdexcept> // for exception handling
+#include <cctype>
+#include <cstdlib>
 
 using namespace std;
 namespace fs = std::filesystem;
@@ -100,6 +102,13 @@ void DisplayMenu() {                                    // display menu
     cout << "Enter your choice (1-4): ";
 }
 
+string toUpper(string name) {
+    for (int i = 0; i < name.length(); i++) {
+       name[i] = toupper(name[i]);
+    }
+    return name;
+}
+
 int Counter() {                                           // function to generate unique ticket ID
 
     const string counterFile = "ticket_counter.txt";
@@ -161,22 +170,57 @@ void GenerateTicket(const vector<Booking>& bookings, const string& ticketID) {
 }
 
 void BookFlights(vector<Flights>& flights, vector<Booking>& bookings, Flights& selectedFlight) {
-    try {
-        int ch2;
-        cout << "\nEnter the flight number to book (1-" << flights.size() << "): ";
-        cin >> ch2;
-        if (ch2 < 1 || ch2 > flights.size()) {
-            throw out_of_range("Invalid flight selection.");
+    int ch2;
+    while (true) {
+        
+        try {
+            cout << "\nEnter the flight number to book (1-" << flights.size() << "): ";
+            cin >> ch2;
+
+            if (cin.fail()) { // check for non-integer input
+                cin.clear(); // clear the error flag
+                cin.ignore(numeric_limits<streamsize>::max(), '\n'); // discard invalid input
+                throw invalid_argument("Invalid input. Please enter a number.");
+            }
+            if (ch2 < 1 || ch2 > flights.size()) {
+                throw out_of_range("Invalid flight selection.");
+            }
+
+            selectedFlight = flights[ch2 - 1];
+            break;  // exit the loop if valid flight is selected
+            
+        } catch (const exception& e) {
+            cerr << "Error: " << e.what() << "\n";
         }
-        selectedFlight = flights[ch2 - 1];
+    }
+    
+    int num;
+    
+    while (true) {
+        try {
 
-        int num;
-        cout << "Enter the number of passengers: ";
-        cin >> num;
+            cout << "Enter the number of passengers (MAX 4): ";
+            cin >> num;
+            
+            if (cin.fail()) { // check for non-integer input
+                cin.clear(); // clear the error flag
+                cin.ignore(numeric_limits<streamsize>::max(), '\n'); // discard invalid input
+                throw invalid_argument("Invalid input. Please enter a number.");
+            }
+            
+            if (num < 1 || num > 4) {
+                throw out_of_range("Invalid number of passengers.");
+            } 
 
+            break;
+
+        } catch (const exception& e) {
+            cerr << "Error: " << e.what() << "\n";
+        }
+    }
         cin.ignore();
         bookings.clear();
-
+        
         int ticketCounter = Counter();
         stringstream ss;
         ss << "TKT" << time(0) << ticketCounter;
@@ -185,25 +229,54 @@ void BookFlights(vector<Flights>& flights, vector<Booking>& bookings, Flights& s
         for (int i = 0; i < num; ++i) {
             string name, gender;
             int age;
-            cout << "\nPassenger " << i + 1 << " Name: ";
-            getline(cin, name);
-            cout << "Gender (M/F/O): ";
-            cin >> gender;
-            cout << "Age: ";
-            cin >> age;
-            cin.ignore();
+            // Name input
+            while (true) {
+                cout << "\nPassenger " << i + 1 << " Name: ";
+                getline(cin, name);
+                
+                if (name.empty() || name.find_first_not_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ") != string::npos) {
+                    cerr << "Error: Invalid name. Please enter a valid name.\n";
+                } else {
 
+                    name = toUpper(name);
+                    break; // Exit loop if name is valid
+                }
+            }
+
+            // Gender input
+            while (true) {
+                cout << "Gender (M/F/O): ";
+                cin >> gender;
+
+                if (gender != "M" && gender != "m" && gender !=  "F" && gender != "f" && gender != "O" && gender !=  "o") {
+                    cerr << "Error: Invalid gender. Please enter 'M', 'F', or 'O'.\n";
+                } else {
+
+                        gender = toupper(gender[0]);
+
+                    break;
+                }
+            }
+
+            // Age input
+            while (true) {
+                cout << "Age: ";
+                cin >> age;
+
+                if (cin.fail() || age < 1 || age > 120) {
+                    cerr << "Error: Invalid age. Please enter valid age.\n";
+                } else break;
+            }
+            cin.ignore();
             bookings.emplace_back(name, gender, age, selectedFlight, ticketID);
         }
-
-        GenerateTicket(bookings, ticketID);
-        cout << "\nBooking successful! " << num << " passenger(s) booked for flight " << selectedFlight.getFlightID() << ".\n";
-    } catch (const exception& e) {
-        cerr << "Error: " << e.what() << "\n";
+            
+            GenerateTicket(bookings, ticketID);
+            cout << "\nBooking successful! " << num << " passenger(s) booked for flight " << selectedFlight.getFlightID() << ".\n";
     }
-}
 
 void SearchFlights(vector<Flights>& flights, vector<Booking>& bookings, Flights& selectedFlight) {
+    // while (true) {}
     try {
         ifstream file("flights.txt");
         if (!file) {
@@ -211,24 +284,35 @@ void SearchFlights(vector<Flights>& flights, vector<Booking>& bookings, Flights&
         }
 
         string searchOrigin, searchDestination;
-        cout << "\nEnter origin city or code (e.g., DEL): ";
-        cin >> searchOrigin;
-        cout << "Enter destination city or code (e.g., BOM): ";
-        cin >> searchDestination;
 
-        cout << "\nSearching for flights...\n";
-        Flights temp;
-        flights.clear();
-        while (file >> temp) {
-            if ((temp.getOrigin() == searchOrigin || temp.getOriginSF() == searchOrigin) &&
-                (temp.getDestination() == searchDestination || temp.getDestinationSF() == searchDestination)) {
-                flights.push_back(temp);
+        while (true) {
+            try {
+                cout << "\nEnter origin city or code (e.g., Delhi or DEL): ";
+                cin >> searchOrigin;
+                searchOrigin = toUpper(searchOrigin);
+                cout << "Enter destination city or code (e.g.,Bombay or BOM): ";
+                cin >> searchDestination;
+                searchDestination = toUpper(searchDestination);
+                
+                cout << "\nSearching for flights...\n";
+                Flights temp;
+                flights.clear();
+                while (file >> temp) {
+                    if ((temp.getOrigin() == searchOrigin || temp.getOriginSF() == searchOrigin) &&
+                    (temp.getDestination() == searchDestination || temp.getDestinationSF() == searchDestination)) {
+                        flights.push_back(temp);
+                    }
+                }
+                file.close();
+                
+                if (flights.empty()) {
+                    throw runtime_error("No matching flights found. Please try again.");
+                }
+
+                break;
+            } catch (const exception& e) {
+                cerr << "Error: " << e.what() << "\n";
             }
-        }
-        file.close();
-
-        if (flights.empty()) {
-            throw runtime_error("No matching flights found. Please try again.");
         }
 
         cout << "\nAvailable Flights:\n";
@@ -281,10 +365,6 @@ void SaveBookingsToFile(const vector<vector<Booking>>& allBookings) {   // save 
 
 void LoadBookingsFromFile(vector<vector<Booking>>& allBookings) {   // load booking details from file
     ifstream file("bookings.txt");
-    if (!file) {
-        cout << "No previous bookings found.\n";
-        return;
-    }
 
     vector<Booking> bookingGroup;
     string line;
@@ -321,16 +401,18 @@ void ViewTickets() {            // display all tickets
         return;
     }
 
+    int i = 0;
     cout << "\nDisplaying all tickets:\n";
     for (const auto& entry : fs::directory_iterator(ticketsDir)) {          // iterate through each file in the directory
         if (entry.is_regular_file()) {
-            cout << "\nTicket File: " << entry.path().filename() << "\n";
+            cout << "Ticket " << ++i << endl;
             ifstream ticket(entry.path());
             if (ticket.is_open()) {
                 string line;
                 while (getline(ticket, line)) {
                     cout << line << endl;
                 }
+                cout << "-----------------------------------------------------\n";
                 ticket.close();
             } else {
                 cout << "Error opening ticket file: " << entry.path().filename() << "\n";
@@ -340,23 +422,40 @@ void ViewTickets() {            // display all tickets
 }
 
 void CancelBooking(vector<vector<Booking>>& allBookings) {      // cancel booking
+    ViewTickets();
     if (allBookings.empty()) {
         cout << "No bookings available to cancel.\n";
         return;
     }
 
-    cout << "Available Tickets:\n";
+    cout << "Enter ticket number to cancel:\n";
     for (int i = 0; i < allBookings.size(); ++i) {
         cout << i + 1 << ". Ticket " << i + 1 << " (" << allBookings[i].size() << " passenger(s))\n";
     }
 
     int choice;
-    cout << "Enter the ticket number to cancel (1-" << allBookings.size() << "): ";
-    cin >> choice;
 
-    if (choice < 1 || choice > allBookings.size()) {
-        cout << "Invalid choice.\n";
-        return;
+    while (true) {
+        
+        try {
+            cout << "Enter the ticket number to cancel (1-" << allBookings.size() << "): ";
+            cin >> choice;
+
+            if (cin.fail()) { // check for non-integer input
+                cin.clear(); // clear the error flag
+                cin.ignore(numeric_limits<streamsize>::max(), '\n'); // discard invalid input
+                throw invalid_argument("Invalid input. Please enter a number.");
+            }
+            
+            if (choice < 1 || choice > allBookings.size()) {
+                throw out_of_range("Invalid number.");
+            }
+
+            break;
+        } catch (const exception& e) {
+            cerr << "Error: " << e.what() << "\n";
+            
+        }
     }
 
     string ticketID = allBookings[choice - 1][0].getTicketID();     // get ticket ID of the selected booking
@@ -375,6 +474,7 @@ void CancelBooking(vector<vector<Booking>>& allBookings) {      // cancel bookin
 }
 
 int main() {
+    system("cls");
     try {
         SetConsoleOutputCP(CP_UTF8);
 
