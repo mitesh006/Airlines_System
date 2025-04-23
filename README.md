@@ -1,17 +1,43 @@
-# India Airlines Flight Booking System
+# ✈️ India Airlines - C++ Airline Ticket Booking System
 
-## Introduction
+A terminal-based C++ project simulating an airline booking system. Users can search flights, book tickets, generate and view tickets, and cancel bookings. All data is handled using persistent file storage.
 
-This is a simple console-based flight booking system developed in C++. It allows users to search for available flights, book tickets for passengers, view generated tickets, and cancel existing bookings. The system utilizes file handling for data persistence and provides a basic interactive experience.
+---
 
-## Prerequisites
+## 📋 Table of Contents
+1. [Features](#features)
+2. [Prerequisites](#prerequisites)
+3. [Installation](#installation)
+4. [Build Instructions](#build-instructions)
+5. [Usage](#usage)
+6. [Key Concepts Used](#key-concepts-used)
+7. [Workflow](#workflow)
+8. [Concept Map](#concept-map)
+9. [Directory Structure](#directory-structure)
+10. [Acknowledgments](#acknowledgments)
+
+---
+
+## ✅ Features
+
+- 🔍 Search available flights by origin & destination
+- 🧾 Book tickets for one or more passengers
+- 📄 Auto-generates unique ticket files with IDs
+- 👥 View all booked tickets
+- ❌ Cancel bookings and delete associated ticket file
+- 💾 Persistent storage using `bookings.txt` and `ticket_counter.txt`
+- 🛠️ Exception handling for robust error management
+
+---
+
+## 📦 Prerequisites
 
 To build and run this application, you will need:
 
 * **A C++ Compiler:** Such as g++ (GNU Compiler Collection) or a compatible compiler.
 * **CMake (Optional but Recommended):** For a more organized build process, especially if you plan to expand the project.
 
-## Installation
+## 🛠️ Installation
 
 1.  **Clone the Repository (if applicable):** If you have the source code in a repository (e.g., Git), clone it to your local machine.
 
@@ -22,7 +48,7 @@ To build and run this application, you will need:
 
 2.  **No Explicit Installation Steps:** This is a standalone C++ application. There's no traditional installation process like installing a package. The executable file (`airlines.exe` on Windows) is the application itself.
 
-## Build Instructions
+## 🔧 Build Instructions
 
 ### Using g++ (Direct Compilation)
 
@@ -45,15 +71,8 @@ To build and run this application, you will need:
 
     The executable (`airlines` or `airlines.exe`) will be created in the `build/Release` or `build/Debug` directory.
 
-## Features
 
-* **Search Flights:** Allows users to search for flights based on origin and destination cities or airport codes.
-* **Book Flights:** Enables users to book seats on a selected flight, recording passenger details (name, gender, age).
-* **Generate Tickets:** Creates individual text files containing booking details for each successful booking, stored in the `tickets` directory.
-* **View All Tickets:** Lists all the generated ticket files present in the `tickets` directory and allows the user to view their contents.
-* **Cancel Booking:** Provides the functionality to cancel an entire booking by selecting a ticket and deleting its corresponding ticket file and booking record.
-
-## Usage
+##  🚀 Usage
 
 1.  **Navigate to the Executable:** Open a terminal or command prompt and navigate to the directory containing the compiled executable (`airlines` or `airlines.exe`).
 
@@ -78,7 +97,7 @@ To build and run this application, you will need:
 
     Enter the number corresponding to the desired action and follow the on-screen prompts.
 
-## Concepts Used
+## 🧠 Concepts Used
 
 This project demonstrates the following key programming concepts:
 
@@ -106,7 +125,7 @@ This project demonstrates the following key programming concepts:
     * Using `stringstream` to create unique ticket IDs.
     * Employing `iomanip` (specifically `setw` and `left`) for formatted output of flight details.
 
-## Workflow
+## 🔄 Workflow
 
 1.  **Application Start:**
     * The program loads any existing booking data from `bookings.txt` into memory.
@@ -135,7 +154,7 @@ This project demonstrates the following key programming concepts:
 5.  **Exit (Option 4):**
     * The program terminates.
 
-## Concept Map (Simplified)
+## 🧭 Concept Map
 
 ```mermaid
 flowchart TD
@@ -177,7 +196,7 @@ airline-booking-cpp/
 
 ---
 
-## Acknowledgments
+## 🙌 Acknowledgments
 
 This simple flight booking system was developed as a demonstration of basic C++ programming concepts, including file handling, the Standard Template Library (specifically `vector`), exception handling, filesystem operations, and inheritance.
 
