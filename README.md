@@ -31,50 +31,16 @@ To build and run this application, you will need:
 2.  Compile the `main.cpp` file along with any necessary flags (like linking the filesystem library):
 
     ```bash
-    g++ main.cpp -o airlines -std=c++17 -lstdc++fs # For g++ on systems supporting C++17 filesystem
-    # Or, if you encounter issues with -lstdc++fs, you might need to link differently
+    g++ -std=c++17 main.cpp -o airlines  
     # depending on your compiler and system.
     ```
 
     On Windows, the output executable will likely be `airlines.exe`. On Linux/macOS, it will be `airlines`.
 
-### Using CMake (Recommended for Larger Projects)
-
-1.  **Create a `CMakeLists.txt` file** in the root directory of your project with the following content:
-
-    ```cmake
-    cmake_minimum_required(VERSION 3.8)
-    project(IndiaAirlines)
-
-    add_executable(airlines main.cpp)
-
-    # Link the filesystem library (may need adjustments based on your system)
-    find_library(FILESYSTEM_LIB stdc++fs)
-    if(FILESYSTEM_LIB)
-        target_link_libraries(airlines ${FILESYSTEM_LIB})
-    endif()
-
-    # For older systems, you might need to use a different approach for filesystem
-    # or ensure your compiler supports it.
-    ```
-
-2.  **Create a build directory:**
+3.  **Run the executable:**
 
     ```bash
-    mkdir build
-    cd build
-    ```
-
-3.  **Run CMake to generate build files:**
-
-    ```bash
-    cmake ..
-    ```
-
-4.  **Build the project:**
-
-    ```bash
-    cmake --build . --config Release # Or Debug
+   ./airlines.exe
     ```
 
     The executable (`airlines` or `airlines.exe`) will be created in the `build/Release` or `build/Debug` directory.
