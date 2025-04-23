@@ -18,6 +18,7 @@ string DepartureTime, ArrivalTime, FlightPrice;
 
 public:
 
+
 Flights() = default;
 
 Flights(string id, string origin, string originSF,
