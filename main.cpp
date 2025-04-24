@@ -14,7 +14,7 @@
 using namespace std;
 namespace fs = std::filesystem;
 
-class Flights {         // for stroing flight details
+class Flights {         // for storing flight details
 protected:
 string FlightID, Origin, OriginSF, Destination, DestinationSF;
 string DepartureTime, ArrivalTime, FlightPrice;
@@ -290,7 +290,7 @@ void SearchFlights(vector<Flights>& flights, vector<Booking>& bookings, Flights&
                 cout << "\nEnter origin city or code (e.g., Delhi or DEL): ";
                 cin >> searchOrigin;
                 searchOrigin = toUpper(searchOrigin);
-                cout << "Enter destination city or code (e.g.,Bombay or BOM): ";
+                cout << "Enter destination city or code (e.g.,Mumbai or BOM): ";
                 cin >> searchDestination;
                 searchDestination = toUpper(searchDestination);
                 
