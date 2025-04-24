@@ -30,12 +30,21 @@ A terminal-based C++ project simulating an airline booking system. Users can sea
 
 ---
 
-## 📦 Prerequisites
+## ✅ Prerequisites
 
-To build and run this application, you will need:
+Ensure you have the following installed on your system:
 
-* **A C++ Compiler:** Such as g++ (GNU Compiler Collection) or a compatible compiler.
-* **CMake (Optional but Recommended):** For a more organized build process, especially if you plan to expand the project.
+- **GCC/G++ compiler (version 9 or later)**  
+  Confirm with:
+  ```bash
+  g++ --version
+  ```
+
+- **DLL dependencies (for Windows builds):**
+  These should be in the same folder as the `airlines.exe`:
+  - `libstdc++-6.dll`
+
+---
 
 ## 🛠️ Installation
 
