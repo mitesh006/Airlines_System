@@ -102,11 +102,10 @@ void DisplayMenu() {                                    // display menu
     cout << "Enter your choice (1-4): ";
 }
 
-string toUpper(string name) {
+void toUpper(string& name) {
     for (int i = 0; i < name.length(); i++) {
        name[i] = toupper(name[i]);
     }
-    return name;
 }
 
 int Counter() {                                           // function to generate unique ticket ID
@@ -238,7 +237,7 @@ void BookFlights(vector<Flights>& flights, vector<Booking>& bookings, Flights& s
                     cerr << "Error: Invalid name. Please enter a valid name.\n";
                 } else {
 
-                    name = toUpper(name);
+                    toUpper(name);
                     break; // Exit loop if name is valid
                 }
             }
@@ -252,7 +251,7 @@ void BookFlights(vector<Flights>& flights, vector<Booking>& bookings, Flights& s
                     cerr << "Error: Invalid gender. Please enter 'M', 'F', or 'O'.\n";
                 } else {
 
-                        gender = toupper(gender[0]);
+                    toUpper(gender);
 
                     break;
                 }
@@ -289,10 +288,10 @@ void SearchFlights(vector<Flights>& flights, vector<Booking>& bookings, Flights&
             try {
                 cout << "\nEnter origin city or code (e.g., Delhi or DEL): ";
                 cin >> searchOrigin;
-                searchOrigin = toUpper(searchOrigin);
+                toUpper(searchOrigin);
                 cout << "Enter destination city or code (e.g.,Mumbai or BOM): ";
                 cin >> searchDestination;
-                searchDestination = toUpper(searchDestination);
+                toUpper(searchDestination);
                 
                 cout << "\nSearching for flights...\n";
                 Flights temp;
